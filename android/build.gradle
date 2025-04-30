@@ -68,10 +68,18 @@ repositories {
 
 dependencies {
     //noinspection GradleDynamicVersion
-    //implementation 'com.facebook.react:react-native:+'  // From node_modules
     implementation('com.facebook.react:react-android:+') {
+        def isRelease = gradle.startParameter.taskRequests.findResult { req ->
+            req.args.findResult { arg ->
+                arg.contains('Release') ? 'release' : null
+            }
+        } ?: 'debug'
+
         attributes {
-            attribute(Attribute.of('com.android.build.api.attributes.BuildTypeAttr', String), 'release')
+            attribute(
+                Attribute.of('com.android.build.api.attributes.BuildTypeAttr', String),
+                isRelease
+            )
         }
     }
     implementation 'com.github.50ButtonsEach:flic2lib-android:1.3.1'

@@ -1,5 +1,5 @@
 // get the native module
-import { NativeModules, NativeEventEmitter, Platform } from 'react-native';
+import { NativeEventEmitter, NativeModules, Platform } from 'react-native';
 
 // event emitter
 import EventEmitter from 'react-native/Libraries/vendor/emitter/EventEmitter';
@@ -11,33 +11,33 @@ import Flic2Button from './flic2Button.js';
 const Flic2Module = NativeModules.Flic2;
 
 // constants
-const SCAN_RESULT_SUCCESS                                                     = 0;
-const SCAN_RESULT_ERROR_ALREADY_RUNNING                                       = 1;
-const SCAN_RESULT_ERROR_BLUETOOTH_NOT_ACTIVATED                               = 2;
-const SCAN_RESULT_ERROR_UNKNOWN                                               = 3;
-const SCAN_RESULT_ERROR_NO_PUBLIC_BUTTON_DISCOVERED                           = 4;
-const SCAN_RESULT_ERROR_ALREADY_CONNECTED_TO_ANOTHER_DEVICE                   = 5;
-const SCAN_RESULT_ERROR_CONNECTION_TIMEOUT                                    = 6;
-const SCAN_RESULT_ERROR_INVALID_VERIFIER                                      = 7;
-const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_PREVIOUS_PAIRING_ALREADY_EXISTING  = 8;
-const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_USER_CANCELED                      = 9;
-const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_UNKNOWN_REASON                     = 10;
-const SCAN_RESULT_ERROR_APP_CREDENTIALS_DONT_MATCH                            = 11;
-const SCAN_RESULT_ERROR_USER_CANCELED                                         = 12;
-const SCAN_RESULT_ERROR_INVALID_BLUETOOTH_ADDRESS                             = 13;
-const SCAN_RESULT_ERROR_GENUINE_CHECK_FAILED                                  = 14;
-const SCAN_RESULT_ERROR_TOO_MANY_APPS                                         = 15;
-const SCAN_RESULT_ERROR_COULD_NOT_SET_BLUETOOTH_NOTIFY                        = 16;
-const SCAN_RESULT_ERROR_COULD_NOT_DISCOVER_BLUETOOTH_SERVICES                 = 17;
-const SCAN_RESULT_ERROR_BUTTON_DISCONNECTED_DURING_VERIFICATION               = 18;
-const SCAN_RESULT_ERROR_FAILED_TO_ESTABLISH                                   = 19;
-const SCAN_RESULT_ERROR_CONNECTION_LIMIT_REACHED                              = 20;
-const SCAN_RESULT_ERROR_NOT_IN_PUBLIC_MODE                                    = 21;
+const SCAN_RESULT_SUCCESS = 0;
+const SCAN_RESULT_ERROR_ALREADY_RUNNING = 1;
+const SCAN_RESULT_ERROR_BLUETOOTH_NOT_ACTIVATED = 2;
+const SCAN_RESULT_ERROR_UNKNOWN = 3;
+const SCAN_RESULT_ERROR_NO_PUBLIC_BUTTON_DISCOVERED = 4;
+const SCAN_RESULT_ERROR_ALREADY_CONNECTED_TO_ANOTHER_DEVICE = 5;
+const SCAN_RESULT_ERROR_CONNECTION_TIMEOUT = 6;
+const SCAN_RESULT_ERROR_INVALID_VERIFIER = 7;
+const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_PREVIOUS_PAIRING_ALREADY_EXISTING = 8;
+const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_USER_CANCELED = 9;
+const SCAN_RESULT_ERROR_BLE_PAIRING_FAILED_UNKNOWN_REASON = 10;
+const SCAN_RESULT_ERROR_APP_CREDENTIALS_DONT_MATCH = 11;
+const SCAN_RESULT_ERROR_USER_CANCELED = 12;
+const SCAN_RESULT_ERROR_INVALID_BLUETOOTH_ADDRESS = 13;
+const SCAN_RESULT_ERROR_GENUINE_CHECK_FAILED = 14;
+const SCAN_RESULT_ERROR_TOO_MANY_APPS = 15;
+const SCAN_RESULT_ERROR_COULD_NOT_SET_BLUETOOTH_NOTIFY = 16;
+const SCAN_RESULT_ERROR_COULD_NOT_DISCOVER_BLUETOOTH_SERVICES = 17;
+const SCAN_RESULT_ERROR_BUTTON_DISCONNECTED_DURING_VERIFICATION = 18;
+const SCAN_RESULT_ERROR_FAILED_TO_ESTABLISH = 19;
+const SCAN_RESULT_ERROR_CONNECTION_LIMIT_REACHED = 20;
+const SCAN_RESULT_ERROR_NOT_IN_PUBLIC_MODE = 21;
 
-const BUTTON_TRIGGER_MODE_CLICK_AND_HOLD                                      = 0;
-const BUTTON_TRIGGER_MODE_CLICK_AND_DOUBLE_CLICK                              = 1;
-const BUTTON_TRIGGER_MODE_CLICK_AND_DOUBLE_CLICK_AND_HOLD                     = 2;
-const BUTTON_TRIGGER_MODE_CLICK                                               = 3;
+const BUTTON_TRIGGER_MODE_CLICK_AND_HOLD = 0;
+const BUTTON_TRIGGER_MODE_CLICK_AND_DOUBLE_CLICK = 1;
+const BUTTON_TRIGGER_MODE_CLICK_AND_DOUBLE_CLICK_AND_HOLD = 2;
+const BUTTON_TRIGGER_MODE_CLICK = 3;
 
 /**
  * React Native Flic 2
@@ -102,8 +102,8 @@ class Flic2 extends EventEmitter {
     this.nativeEvents.addListener('didReceiveButtonEvent', this.didReceiveButtonEventFunction);
 
 
-	  this.registerInitializedCallback();
-	
+    this.registerInitializedCallback();
+
 
     // known buttons
     this.knownButtons = {};
@@ -116,26 +116,26 @@ class Flic2 extends EventEmitter {
     // start the native context
     Flic2Module.startup();
   }
-  
-  registerInitializedCallback(){
-    if(Platform.OS === 'android') {
-      Flic2Module.registerFlic2ManagerInitializedCallback( (result) => {
-        if(result) {
+
+  registerInitializedCallback() {
+    if (Platform.OS === 'android') {
+      Flic2Module.registerFlic2ManagerInitializedCallback((result) => {
+        if (result) {
           this.onInitialized();
         }
-      })	
+      });
     } else {
       this.nativeEvents.addListener('managerInitialized', this.onInitializedFunction);
     }
-  }  
+  }
 
   onInitialized() {
-	  this.isFlic2ManagerInitialized = true;
+    this.isFlic2ManagerInitialized = true;
     this.emit('managerInitialized');
   }
 
   isInitialized() {
-	return this.isFlic2ManagerInitialized;
+    return this.isFlic2ManagerInitialized;
   }
 
 
@@ -182,13 +182,13 @@ class Flic2 extends EventEmitter {
 
         // mutate
         const exportButtons = [];
-        for (const button of buttons){
+        for (const button of buttons) {
 
           // button uuid
           const buttonUuid = button.uuid;
 
           // check if we have the button object in memory
-          if (typeof this.knownButtons[buttonUuid] !== 'undefined'){
+          if (typeof this.knownButtons[buttonUuid] !== 'undefined') {
 
             // update
             const knownButton = this.knownButtons[buttonUuid];
@@ -238,7 +238,7 @@ class Flic2 extends EventEmitter {
   startScan() {
 
     // listen for scanResult
-    this.nativeEvents.addListener('scanResult', this.onScanResultFunction);
+    this.scanResultSubscription = this.nativeEvents.addListener('scanResult', this.onScanResultFunction);
 
     // start the scan
     Flic2Module.startScan();
@@ -257,7 +257,10 @@ class Flic2 extends EventEmitter {
   stopScan() {
 
     // listen for scanResult
-    this.nativeEvents.removeListener('scanResult', this.onScanResultFunction);
+    if (this.scanResultSubscription) {
+      this.scanResultSubscription.remove();
+      this.scanResultSubscription = undefined;
+    }
 
     // start the scan
     Flic2Module.stopScan();
@@ -273,13 +276,16 @@ class Flic2 extends EventEmitter {
    *
    * @version 1.0.0
    */
-  onScanResult({ event, error, result, button }){
+  onScanResult({ event, error, result, button }) {
 
     // check if error
     let ButtonObject;
     if (event === 'completion') {
       // remove listener
-      this.nativeEvents.removeListener('scanResult', this.onScanResultFunction);
+      if (this.scanResultSubscription) {
+        this.scanResultSubscription.remove();
+        this.scanResultSubscription = undefined;
+      }
 
       if (!!error === false) {
 
@@ -290,7 +296,7 @@ class Flic2 extends EventEmitter {
         this.knownButtons[ButtonObject.getUuid()] = ButtonObject;
 
       }
-    } 
+    }
 
     // check if error
     this.emit('scanResult', {
@@ -308,13 +314,13 @@ class Flic2 extends EventEmitter {
    *
    * @version 1.0.0
    */
-  didReceiveButtonEvent(eventData){
+  didReceiveButtonEvent(eventData) {
 
     // button uuid
     const buttonUuid = eventData.button.uuid;
 
     // check if we have the button object in memory
-    if (typeof this.knownButtons[buttonUuid] !== 'undefined'){
+    if (typeof this.knownButtons[buttonUuid] !== 'undefined') {
 
       // update
       const knownButton = this.knownButtons[buttonUuid];
@@ -345,7 +351,6 @@ class Flic2 extends EventEmitter {
   }
 
 
-
   connectAllKnownButtons() {
 
     // pass to native module
@@ -353,7 +358,7 @@ class Flic2 extends EventEmitter {
 
   }
 
-  buttonConnect(uuid){
+  buttonConnect(uuid) {
     return new Promise(resolve => {
 
       // pass to native module
